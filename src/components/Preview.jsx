@@ -9,6 +9,7 @@ export const Preview = () => {
   const { width, height } = form;
   const margin = 10;
   const paperViewBox = `0 0 ${width + margin * 2} ${height + margin * 2}`;
+  const transform = `translate(${margin}, ${margin})`;
 
   return (
     <div className="flex flex-col gap-4">
@@ -30,14 +31,22 @@ export const Preview = () => {
         <path
           d={previewData}
           className="stroke-rose-400"
-          transform={`translate(${margin}, ${margin})`}
+          transform={transform}
           strokeLinejoin="round"
         />
         <path
           d={previewData}
           className="stroke-rose-400/25"
           strokeWidth={form.bit_diameter}
-          transform={`translate(${margin}, ${margin})`}
+          transform={transform}
+          strokeLinejoin="round"
+        />
+        <path
+          d={`M-5,${form.height} L5,${form.height} M0,${form.height - 5} L0,${
+            form.height + 5
+          }`}
+          className="stroke-emerald-400"
+          transform={transform}
           strokeLinejoin="round"
         />
       </svg>
