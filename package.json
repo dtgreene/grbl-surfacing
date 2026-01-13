@@ -1,0 +1,23 @@
+{
+  "name": "grbl-surfacing",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "vite --config vite.config.js",
+    "build": "vite build --base=https://dtgreene.github.io/grbl-surfacing/dist/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "@vitejs/plugin-react": "^5.1.2",
+    "debounce": "^3.0.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-hook-form": "^7.71.0",
+    "tailwindcss": "^4.1.18",
+    "valtio": "^2.3.0",
+    "vite": "^7.3.1"
+  }
+}
