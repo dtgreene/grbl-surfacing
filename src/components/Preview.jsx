@@ -16,7 +16,7 @@ export const Preview = () => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox={paperViewBox}
-        className="bg-zinc-200 fill-none max-h-200"
+        className="bg-zinc-200 fill-none max-h-180"
         strokeLinecap="round"
         strokeWidth="1"
       >
