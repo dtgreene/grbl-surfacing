@@ -2,17 +2,6 @@ import { state } from '../state';
 
 export function createGCode() {
   const { form } = state;
-  const setUnits = form.units === 'mm' ? 'G21' : 'G20';
-  const startSpindle = `M3 S${form.rpm}`;
-
-  const gcode = [
-    'G90', // absolute positioning
-    setUnits,
-    'G94', // feedrate mode: units per minute
-    'G17', // xy plane selection
-    'G54', // use work coord system
-    startSpindle,
-  ];
 
   const width = form.width;
   const height = form.height;
@@ -23,6 +12,7 @@ export function createGCode() {
   let x = 0;
   let y = 0;
   let prevX = x;
+  let gcode = form.start_gcode.split('\n');
 
   while (x < width) {
     if (y === 0) {
@@ -49,7 +39,20 @@ export function createGCode() {
     gcode.push(getCutMove(x, y, rate));
   }
 
-  gcode.push('M5', 'M2');
+  gcode = gcode.concat(form.end_gcode.split('\n'));
+
+  // Remove comments
+  gcode = gcode
+    .filter((line) => line.trim())
+    .map((line) => {
+      const commentIndex = line.indexOf(';');
+
+      if (commentIndex > -1) {
+        return line.substr(0, commentIndex);
+      }
+
+      return line;
+    });
 
   return gcode.join('\n');
 }

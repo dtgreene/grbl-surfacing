@@ -1,16 +1,18 @@
 import debounce from 'debounce';
 import { proxy, subscribe } from 'valtio';
+import { createGCode, createPreviewPath } from '../utils';
 
 const STORAGE_KEY = 'grbl-surfacing';
 const defaultState = {
   form: {
     width: 100,
     height: 100,
-    units: 'mm',
     bit_diameter: 12.7,
     step_over: 0.5,
     feed_rate: 100,
-    rpm: 5000,
+    start_gcode:
+      'G90 ; absolute positioning\nG21 ; set units mm\nG94 ; use units per minute\nG17 ; use xy plane\nG54 ; use 1st work offset\nM3 S5000 ; start spindle at 5000 rpm',
+    end_gcode: 'M9 ; stop spindle\nM2 ; program end',
   },
   gcode: '',
   previewPath: '',
@@ -45,4 +47,21 @@ function getDefaultState() {
   }
 
   return defaultState;
+}
+
+export function deleteStorageData() {
+  window.localStorage.removeItem(STORAGE_KEY);
+}
+
+export function updateData(data) {
+  state.form = data;
+
+  try {
+    state.gcode = createGCode();
+    state.previewData = createPreviewPath();
+  } catch (error) {
+    state.gcode = '';
+    state.previewData = '';
+    console.error(`Failed to create GCode: ${error}`);
+  }
 }

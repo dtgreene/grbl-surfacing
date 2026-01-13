@@ -2,9 +2,8 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSnapshot } from 'valtio';
 
-import { state } from '../state';
+import { deleteStorageData, state, updateData } from '../state';
 import { Preview } from './Preview';
-import { createGCode, createPreviewPath } from '../utils';
 
 export const App = () => {
   const {
@@ -19,19 +18,17 @@ export const App = () => {
     if (!isReady) return;
 
     reset(state.form);
-  }, [isReady]);
 
-  const onSubmit = (data) => {
-    state.form = data;
-    state.gcode = createGCode();
-    state.previewData = createPreviewPath();
-  };
+    if (!state.gcode || !state.preview) {
+      updateData(state.form);
+    }
+  }, [isReady]);
 
   return (
     <div className="flex gap-8">
       <form
-        className="flex flex-col gap-4 w-64 shrink-0"
-        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4 w-100 shrink-0"
+        onSubmit={handleSubmit(updateData)}
       >
         <div className="flex justify-between">
           <label>Width</label>
@@ -52,17 +49,6 @@ export const App = () => {
             required
             {...register('height', { valueAsNumber: true })}
           />
-        </div>
-        <div className="flex justify-between">
-          <label>Units</label>
-          <select
-            className="border border-zinc-400 rounded px-1 w-24"
-            required
-            {...register('units')}
-          >
-            <option value="mm">mm</option>
-            <option value="in">in</option>
-          </select>
         </div>
         <div className="flex justify-between">
           <label>Bit Diameter</label>
@@ -97,14 +83,20 @@ export const App = () => {
             {...register('feed_rate', { valueAsNumber: true })}
           />
         </div>
-        <div className="flex justify-between">
-          <label>RPM</label>
-          <input
-            type="number"
-            min="1"
-            className="border border-zinc-400 rounded px-1 w-24"
-            required
-            {...register('rpm', { valueAsNumber: true })}
+        <div className="flex flex-col gap-1">
+          <label>Start GCode</label>
+          <textarea
+            className="w-full border border-zinc-400 p-1 rounded min-h-48 font-mono"
+            autoCorrect="false"
+            {...register('start_gcode')}
+          />
+        </div>
+        <div className="flex flex-col gap-1">
+          <label>End GCode</label>
+          <textarea
+            className="w-full border border-zinc-400 p-1 rounded min-h-48 font-mono"
+            autoCorrect="false"
+            {...register('end_gcode')}
           />
         </div>
         <div className="mt-4">
@@ -120,19 +112,29 @@ export const App = () => {
         <Preview />
         {gcode && (
           <div className="flex flex-col gap-4">
+            <div className="text-2xl">GCode</div>
             <textarea
               value={gcode}
               readOnly
-              className="w-full border border-zinc-400 p-4 rounded min-h-80"
+              className="w-full border border-zinc-400 p-1 rounded min-h-80 font-mono"
             />
-            <a
-              href={`data:text/plain;charset=utf-8,${encodeURIComponent(
-                gcode
-              )}`}
-              download="surfacing.nc"
-            >
-              Download
-            </a>
+            <div className="flex justify-between items-center">
+              <a
+                href={`data:text/plain;charset=utf-8,${encodeURIComponent(
+                  gcode
+                )}`}
+                download="surfacing.nc"
+                className="text-sky-600 font-bold btn-default"
+              >
+                Download
+              </a>
+              <button
+                className="btn-default rounded border border-zinc-400 px-2 py-1"
+                onClick={deleteStorageData}
+              >
+                Delete Storage Data
+              </button>
+            </div>
           </div>
         )}
       </div>

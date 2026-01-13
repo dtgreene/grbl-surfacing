@@ -11,33 +11,36 @@ export const Preview = () => {
   const paperViewBox = `0 0 ${width + margin * 2} ${height + margin * 2}`;
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox={paperViewBox}
-      className="bg-zinc-200 fill-none max-h-200"
-      strokeLinecap="round"
-      strokeWidth="1"
-    >
-      <rect
-        x={margin}
-        y={margin}
-        width={width}
-        height={height}
-        className="stroke-zinc-500"
-      />
-      <path
-        d={previewData}
-        className="stroke-rose-400"
-        transform={`translate(${margin}, ${margin})`}
-        strokeLinejoin="round"
-      />
-      <path
-        d={previewData}
-        className="stroke-rose-400/25"
-        strokeWidth={form.bit_diameter}
-        transform={`translate(${margin}, ${margin})`}
-        strokeLinejoin="round"
-      />
-    </svg>
+    <div className="flex flex-col gap-4">
+      <div className="text-2xl">Preview</div>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox={paperViewBox}
+        className="bg-zinc-200 fill-none max-h-200"
+        strokeLinecap="round"
+        strokeWidth="1"
+      >
+        <rect
+          x={margin}
+          y={margin}
+          width={width}
+          height={height}
+          className="stroke-zinc-500"
+        />
+        <path
+          d={previewData}
+          className="stroke-rose-400"
+          transform={`translate(${margin}, ${margin})`}
+          strokeLinejoin="round"
+        />
+        <path
+          d={previewData}
+          className="stroke-rose-400/25"
+          strokeWidth={form.bit_diameter}
+          transform={`translate(${margin}, ${margin})`}
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
   );
 };
